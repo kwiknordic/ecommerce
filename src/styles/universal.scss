@@ -36,6 +36,10 @@ h1,h2,h3,h4,h5,h6 {
   margin: 0;
 }
 
+a:visited {
+  color: unset;
+}
+
 // header
 header {
   display: flex;
@@ -290,7 +294,7 @@ footer {
       .overview {
         margin-top: calc(var(--container-padding) /4);
 
-        span {
+        span, a {
           padding-inline: var(--container-padding);
           padding-block: calc(var(--container-padding) /4);
           display: block;
@@ -298,9 +302,10 @@ footer {
           cursor: pointer;
           background-color: unset;
           transition: background-color 0.5s;
+          text-decoration: none;
         }
 
-        span:hover {
+        span:hover, a:hover {
           background-color: #e6e6e6;
           transition: background-color 0.5s;
         }
@@ -311,7 +316,13 @@ footer {
         li {
           padding-block: calc(var(--container-padding) /4);
           padding-inline: var(--container-padding);
+          text-decoration: none;
           cursor: pointer;
+
+          a {
+            text-decoration: none;
+            color: unset;
+          }
         }
 
         li:hover {

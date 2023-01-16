@@ -46,7 +46,7 @@ export function RightNav({ children }: { children: ReactNode }) {
 export function Search() {
   return (
     <div className="search">
-      <input type="search" placeholder="Search for products.." />
+      <input type="search" placeholder="Sök efter produkt.." />
     </div>
   )
 }

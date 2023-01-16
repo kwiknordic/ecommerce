@@ -49,7 +49,7 @@ export default function MainMenu({ setToggleMenu }: MainMenuPropTypes) {
         </>
       )
 
-      return <li key={child.menu}>{child.menu}</li>
+      return <li key={child.menu}><Link to={`/cat/${childHref}`}>{child.menu}</Link></li>
     })
   }
 
