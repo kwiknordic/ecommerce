@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 
 // add typescript to timer and this-keyword
-function debounce(fn, ms) {
-  let timer;
+function debounce(fn: any, ms: number) {
+  let timer: number | undefined;
   return () => {
     clearTimeout(timer)
     timer = setTimeout(() => {
-      timer = null
-      fn.apply(this, arguments)
+      timer = undefined
+      fn.apply(fn, arguments)
     }, ms)
   };
 }

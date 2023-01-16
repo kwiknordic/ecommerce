@@ -1,8 +1,8 @@
-import { faker } from '@faker-js/faker';
+/* import { faker } from '@faker-js/faker'; */
 import { useRef, useState, useEffect } from "react"
 import { useResizeListener } from '../hooks/useResizeListener';
 
-const randomName = faker.name.fullName(); // Rowan Nikolaus
+/* const randomName = faker.name.fullName(); // Rowan Nikolaus */
 
 function Home() {
   const [text, setText] = useState("Hello")
@@ -11,7 +11,6 @@ function Home() {
   return (
     <>
       <h1>Home</h1>
-      <span>{randomName}</span>
     </>
   )
 }

@@ -15,9 +15,11 @@ function Layout() {
 
   const isWide = innerWidth > 850
 
-  function handleToggleMenu(event) {
-    if (event.target.closest("aside") || event.target.closest(".nav")) {
-      setToggleMenu((prev) => !prev)
+  function handleToggleMenu(event: React.MouseEvent) {
+    if (event.target instanceof HTMLElement) {
+      if (event.target.closest("aside") || event.target.closest(".nav")) {
+        setToggleMenu((prev) => !prev)
+      }
     }
   }
 
