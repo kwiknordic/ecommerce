@@ -1,18 +1,21 @@
 import { useParams } from "react-router-dom";
 import { categories } from "../db/categories.js";
 import { singleCategoryType } from "../types/universal.js";
+import { convertSwedishChars } from "../utils/convertSwedishChars.js";
 import { filterByParent } from "../utils/filterByParent.js";
 
 export default function Category() {
   const { name: param } = useParams();
   const filteredCategories = filterByParent(categories, param as string)
-  const categoryTitle = filteredCategories.at(0)?.parent ?? "Category not found"
+  const categoryTitle = categories.find(menuObj => {
+    return convertSwedishChars(menuObj.menu.toLocaleLowerCase()) === param
+  })
 
   return (
     <>
-      <h1>{categoryTitle}</h1>
+      <h1>{categoryTitle ? categoryTitle.menu : "Category unknown"}</h1>
       <div className="categoriesPage">
-        {filteredCategories.map(category => <CategoryCard category={category} />)}
+        {filteredCategories ? filteredCategories.map(category => <CategoryCard category={category} key={category.menu} />) : null}
       </div>
     </>
   )

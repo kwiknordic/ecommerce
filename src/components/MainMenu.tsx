@@ -4,54 +4,12 @@ import { useState } from 'react';
 import { convertSwedishChars } from '../utils/convertSwedishChars.js';
 import { categories } from '../db/categories.js';
 import { filterByParent } from '../utils/filterByParent.js';
-
-function hasOwnChildren(list: CategoriesType, menu: string) {
-  return list.filter((menuObject) => {
-    return list.some(menu => menu.parent?.includes(menuObject.menu))
-  }).some(item => item.menu === menu)
-}
+import { TitleProps, MainMenuPropTypes, SubHeaderProps } from '../types/mainMenu.js';
 
 export type CategoriesType = typeof categories
-type MainMenuPropTypes = {
-  setToggleMenu: React.Dispatch<React.SetStateAction<boolean>>
-}
 
 export default function MainMenu({ setToggleMenu }: MainMenuPropTypes) {
-  const [toggleSubMenu, setToggleSubMenu] = useState<string[]>([])
-
-  function handleHeadingClick(currentMenu: string) {
-    const exists = toggleSubMenu.some(activeMenu => activeMenu === currentMenu)
-    if (exists) return setToggleSubMenu(toggleSubMenu.filter(menu => menu !== currentMenu))
-    return setToggleSubMenu([...toggleSubMenu, currentMenu])
-  }
-
-  function createMenu(list: CategoriesType, hasParent: string | null) {
-    const children = filterByParent(list, hasParent)
-    return children.map((child) => {
-      const childHref = convertSwedishChars(child.menu.toLocaleLowerCase())
-      if (hasOwnChildren(list, child.menu)) return (
-        <>
-          <li key={child.menu} className={`expandable`}>
-            <div className='heading' onClick={() => handleHeadingClick(child.menu)}>
-              <span>{child.menu}</span>
-              <Icon icon="material-symbols:arrow-drop-down" />
-            </div>
-            {(toggleSubMenu.includes(child.menu)) && <>
-              <div className='overview' onClick={() => setToggleMenu(prev => !prev)}>
-                <Link to={`/cat/${childHref}`}>Allt i {child.menu}</Link>
-              </div>
-              <ul className={"leaf"}>
-                {createMenu(list, child.menu)}
-              </ul>
-            </>}
-          </li >
-          <hr />
-        </>
-      )
-
-      return <li key={child.menu}><Link to={`/cat/${childHref}`}>{child.menu}</Link></li>
-    })
-  }
+  const [visibleMenu, setVisibleMenu] = useState<string[]>([])
 
   return (
     <div className='sideMenu'>
@@ -60,6 +18,74 @@ export default function MainMenu({ setToggleMenu }: MainMenuPropTypes) {
       </ul>
       <aside>
       </aside>
+    </div>
+  )
+
+  function createMenu(list: CategoriesType, hasParent: string | null) {
+    const subMenu = filterByParent(list, hasParent)
+    return subMenu.map((child) => {
+      const childURL = convertSwedishChars(child.menu.toLocaleLowerCase())
+
+      if (!hasOwnChildren(list, child.menu)) return (
+        <li className="singleCategory" key={child.menu} onClick={() => setToggleMenu(prev => !prev)}>
+          <Link to={`/cat/${childURL}`}>{child.menu}</Link>
+        </li>
+      )
+
+      return (
+        <>
+          <li key={child.menu} className={`expandable`}>
+            <Title child={child} state={[visibleMenu, setVisibleMenu]}>
+              <span>{child.menu}</span>
+              <Icon icon="material-symbols:arrow-drop-down" />
+            </Title>
+            {(visibleMenu.includes(child.menu)) &&
+              <>
+                <SubHeader setToggleMenu={setToggleMenu}>
+                  <Link to={`/cat/${childURL}`}>Allt i {child.menu}</Link>
+                </SubHeader>
+                <ul>
+                  {createMenu(list, child.menu)}
+                </ul>
+              </>}
+          </li>
+          <hr />
+        </>
+      )
+    })
+  }
+}
+
+function hasOwnChildren(list: CategoriesType, menu: string) {
+  return list.filter((menuObject) => {
+    return list.some(menu => menu.parent?.includes(menuObject.menu))
+  }).some(item => item.menu === menu)
+}
+
+/* Subheader */
+
+function SubHeader({ children, setToggleMenu }: SubHeaderProps) {
+  return (
+    <div className='subHeader' onClick={() => setToggleMenu(prev => !prev)}>
+      {children}
+    </div>
+  )
+}
+
+/* Title */
+
+function Title({ child, state, children }: TitleProps) {
+  const [visibleMenu, setVisibleMenu] = state
+
+  function handleHeadingClick(currentMenu: string) {
+    const exists = visibleMenu.some(activeMenu => activeMenu === currentMenu)
+    if (exists) return setVisibleMenu(visibleMenu.filter(menu => menu !== currentMenu))
+    return setVisibleMenu([...visibleMenu, currentMenu])
+  }
+
+  return (
+    <div className='heading' onClick={() => handleHeadingClick(child.menu)}>
+      {children}
     </div>
   )
 }
