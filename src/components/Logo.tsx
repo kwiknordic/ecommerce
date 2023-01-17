@@ -1,7 +1,7 @@
 export function Logo() {
   return (
-    <div className="logo">
-      Kwikommerce
+    <div id="logo">
+      <a href="/">Kwikommerce</a>
     </div>
   )
 }

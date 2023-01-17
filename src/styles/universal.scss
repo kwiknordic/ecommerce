@@ -51,7 +51,7 @@ header {
     transition: 0.5s;
   }
 
-  a:hover {
+  .cta:hover {
     color: #f7d0d0;
     transition: 0.5s;
   }
@@ -106,7 +106,7 @@ header {
       align-items: center;
       padding-bottom:  calc(var(--container-padding) / 2);
 
-      .logo {
+      #logo {
         font-size: 2rem;
       }
 
@@ -182,7 +182,7 @@ footer {
     transition: 0.5s;
   }
 
-  a:hover {
+  .footer-menu a:hover {
     color: var(--primary-text-link-color-hover);
     transition: 0.5s;
   }
@@ -194,7 +194,7 @@ footer {
     gap: 3rem;
 
     .main-content {
-      .logo {
+      #logo {
         font-size: 2rem;
       }
 
